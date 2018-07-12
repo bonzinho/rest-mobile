@@ -32,7 +32,7 @@ export class AppHttpService {
 
     // Construtor de rotas para as requisições
     builder(resource: string) {
-        this.url =  'http://localhost:8000/api/v1/' + resource;
+        this.url =  'https://immense-gorge-48973.herokuapp.com//api/v1/' + resource;
         return this;
     }
 

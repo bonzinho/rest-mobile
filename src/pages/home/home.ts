@@ -27,7 +27,6 @@ export class HomePage {
     ngOnInit(){
 
         let coords = JSON.parse(window.localStorage.getItem('coords')) || null;
-
         coords = {
             latitude: -23.6194693,
             longitude: -45.4096306
