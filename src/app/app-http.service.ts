@@ -1,8 +1,6 @@
-//Centraliza todas as requisições
 import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {environment} from '../environments/environment';
-import { Router } from '@angular/router';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { AlertController } from 'ionic-angular';
 
 import 'rxjs/add/operator/toPromise'; //importar promisses
 
@@ -15,7 +13,7 @@ export class AppHttpService {
     protected header: Headers;
 
 
-    constructor(protected http: Http, private router: Router) {
+    constructor(protected http: Http, private alertCtrl: AlertController) {
         this.setAccessToken();
     }
 
@@ -34,7 +32,7 @@ export class AppHttpService {
 
     // Construtor de rotas para as requisições
     builder(resource: string) {
-        this.url =  environment.server_url + '/api/v1/' + resource;
+        this.url =  'http://localhost:8000/api/v1/' + resource;
         return this;
     }
 
@@ -95,7 +93,6 @@ export class AppHttpService {
                 let message = 'Algo deu errado no servidor, informe o erro ' + err.status + ' ao administrador';
                 if (err.status === 401) {
                     message = 'Sem permissões de acesso, insira umas credenciais válidas';
-                    this.router.navigate(['/login']);
                 }
 
                 if (err.status === 422) {
@@ -106,8 +103,7 @@ export class AppHttpService {
                     message = 'Sem conexão ao servidor, verifique a conexão ou tente novamente em alguns minutos';
                 }
 
-                window.Materialize.toast(message, 3000, 'red');
-
+                this.showAlert(message);
                 return err;
             });
     }
@@ -136,4 +132,21 @@ export class AppHttpService {
         }
         return null;
     }
+
+    protected showAlert(message) {
+        let prompt = this.alertCtrl.create({
+            title: 'Algo deu errado',
+            message: message,
+            buttons: [
+                {
+                    text: 'Ok',
+                    handler: data => {
+                        console.log('Btn "ok" in Alert control clicked')
+                    }
+                }
+            ]
+        });
+        prompt.present();
+    }
+
 }
